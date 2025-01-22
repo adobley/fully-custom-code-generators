@@ -1,0 +1,41 @@
+<.header>
+  Listing Npcs
+  <:actions>
+    <.link patch={~p"/npcs/new"}>
+      <.button>New Npc</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="npcs"
+  rows={@streams.npcs}
+  row_click={fn {_id, npc} -> JS.navigate(~p"/npcs/#{npc}") end}
+>
+  <:col :let={{_id, npc}} label="Name">{npc.name}</:col>
+  <:action :let={{_id, npc}}>
+    <div class="sr-only">
+      <.link navigate={~p"/npcs/#{npc}"}>Show</.link>
+    </div>
+    <.link patch={~p"/npcs/#{npc}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, npc}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: npc.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="npc-modal" show on_cancel={JS.patch(~p"/npcs")}>
+  <.live_component
+    module={Web.Live.NPC.FormComponent}
+    id={@npc.id || :new}
+    title={@page_title}
+    action={@live_action}
+    npc={@npc}
+    patch={~p"/npcs"}
+  />
+</.modal>

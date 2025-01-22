@@ -1,0 +1,26 @@
+<.header>
+  Npc {@npc.id}
+  <:subtitle>This is a npc record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/npcs/#{@npc}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit npc</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name">{@npc.name}</:item>
+</.list>
+
+<.back navigate={~p"/npcs"}>Back to npcs</.back>
+
+<.modal :if={@live_action == :edit} id="npc-modal" show on_cancel={JS.patch(~p"/npcs/#{@npc}")}>
+  <.live_component
+    module={Web.Live.NPC.FormComponent}
+    id={@npc.id}
+    title={@page_title}
+    action={@live_action}
+    npc={@npc}
+    patch={~p"/npcs/#{@npc}"}
+  />
+</.modal>
