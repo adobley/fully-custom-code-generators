@@ -17,6 +17,7 @@ defmodule Web.Router do
   scope "/", Web do
     pipe_through :browser
 
+    live "/", Live.NPC.Index, :index
     live "/npcs", Live.NPC.Index, :index
     live "/npcs/new", Live.NPC.Index, :new
     live "/npcs/:id/edit", Live.NPC.Index, :edit
