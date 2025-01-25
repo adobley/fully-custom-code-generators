@@ -3,7 +3,7 @@ defmodule Web.Live.Quest.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :quests, Core.Quest.list_quests())}
+    {:ok, stream(socket, :quests, Core.Quests.list_quests())}
   end
 
   @impl true
@@ -14,7 +14,7 @@ defmodule Web.Live.Quest.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Quest")
-    |> assign(:quest, Core.Quest.get_quest!(id))
+    |> assign(:quest, Core.Quests.get_quest!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -36,8 +36,8 @@ defmodule Web.Live.Quest.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    quest = Core.Quest.get_quest!(id)
-    {:ok, _} = Core.Quest.delete_quest(quest)
+    quest = Core.Quests.get_quest!(id)
+    {:ok, _} = Core.Quests.delete_quest(quest)
 
     {:noreply, stream_delete(socket, :quests, quest)}
   end

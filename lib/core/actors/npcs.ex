@@ -1,4 +1,4 @@
-defmodule Core.Actors.NPC do
+defmodule Core.Actors.NPCs do
   @moduledoc """
   NPC access
   """

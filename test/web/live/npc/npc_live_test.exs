@@ -1,4 +1,4 @@
-defmodule Web.Live.NPC.NPCLiveTest do
+defmodule Web.Live.NPCs.NPCsLiveTest do
   use Web.ConnCase
 
   import Phoenix.LiveViewTest

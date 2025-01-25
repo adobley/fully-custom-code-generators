@@ -11,7 +11,7 @@ defmodule Web.Live.Quest.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:quest, Core.Quest.get_quest!(id))}
+     |> assign(:quest, Core.Quests.get_quest!(id))}
   end
 
   defp page_title(:show), do: "Show Quest"

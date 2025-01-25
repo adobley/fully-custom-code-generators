@@ -1,4 +1,4 @@
-defmodule Core.Quest do
+defmodule Core.Quests do
   @moduledoc """
   Quest access
   """

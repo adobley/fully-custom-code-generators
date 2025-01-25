@@ -1,4 +1,4 @@
-defmodule Web.Live.NPC.FormComponent do
+defmodule Web.Live.NPCs.FormComponent do
   use ArcaneAssistWeb, :live_component
 
   alias Core.Actors
@@ -34,13 +34,13 @@ defmodule Web.Live.NPC.FormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:form, fn ->
-       to_form(Actors.NPC.change_npc(npc))
+       to_form(Actors.NPCs.change_npc(npc))
      end)}
   end
 
   @impl true
   def handle_event("validate", %{"npc" => npc_params}, socket) do
-    changeset = Actors.NPC.change_npc(socket.assigns.npc, npc_params)
+    changeset = Actors.NPCs.change_npc(socket.assigns.npc, npc_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -49,7 +49,7 @@ defmodule Web.Live.NPC.FormComponent do
   end
 
   defp save_npc(socket, :edit, npc_params) do
-    case Actors.NPC.update_npc(socket.assigns.npc, npc_params) do
+    case Actors.NPCs.update_npc(socket.assigns.npc, npc_params) do
       {:ok, npc} ->
         notify_parent({:saved, npc})
 
@@ -64,7 +64,7 @@ defmodule Web.Live.NPC.FormComponent do
   end
 
   defp save_npc(socket, :new, npc_params) do
-    case Actors.NPC.create_npc(npc_params) do
+    case Actors.NPCs.create_npc(npc_params) do
       {:ok, npc} ->
         notify_parent({:saved, npc})
 

@@ -17,20 +17,20 @@ defmodule Web.Router do
   scope "/", Web do
     pipe_through :browser
 
-    live "/", Live.NPC.Index, :index
-    live "/npcs", Live.NPC.Index, :index
-    live "/npcs/new", Live.NPC.Index, :new
-    live "/npcs/:id/edit", Live.NPC.Index, :edit
+    live "/", Live.NPCs.Index, :index
+    live "/npcs", Live.NPCs.Index, :index
+    live "/npcs/new", Live.NPCs.Index, :new
+    live "/npcs/:id/edit", Live.NPCs.Index, :edit
 
-    live "/npcs/:id", Live.NPC.Show, :show
-    live "/npcs/:id/show/edit", Live.NPC.Show, :edit
+    live "/npcs/:id", Live.NPCs.Show, :show
+    live "/npcs/:id/show/edit", Live.NPCs.Show, :edit
 
-    live "/quests", Live.Quest.Index, :index
-    live "/quests/new", Live.Quest.Index, :new
-    live "/quests/:id/edit", Live.Quest.Index, :edit
+    live "/quests", Live.Quests.Index, :index
+    live "/quests/new", Live.Quests.Index, :new
+    live "/quests/:id/edit", Live.Quests.Index, :edit
 
-    live "/quests/:id", Live.Quest.Show, :show
-    live "/quests/:id/show/edit", Live.Quest.Show, :edit
+    live "/quests/:id", Live.Quests.Show, :show
+    live "/quests/:id/show/edit", Live.Quests.Show, :edit
   end
 
   # Other scopes may use custom stacks.

@@ -1,4 +1,4 @@
-defmodule Web.Live.NPC.Show do
+defmodule Web.Live.NPCs.Show do
   use ArcaneAssistWeb, :live_view
 
   alias Core.Actors
@@ -13,7 +13,7 @@ defmodule Web.Live.NPC.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:npc, Actors.NPC.get_npc!(id))}
+     |> assign(:npc, Actors.NPCs.get_npc!(id))}
   end
 
   defp page_title(:show), do: "Show Npc"

@@ -13,7 +13,7 @@ defmodule ArcaneAssist.ActorsFixtures do
       |> Enum.into(%{
         name: "some name"
       })
-      |> Core.Actors.NPC.create_npc()
+      |> Core.Actors.NPCs.create_npc()
 
     npc
   end

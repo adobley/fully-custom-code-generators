@@ -36,13 +36,13 @@ defmodule Web.Live.Quest.FormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:form, fn ->
-       to_form(Core.Quest.change_quest(quest))
+       to_form(Core.Quests.change_quest(quest))
      end)}
   end
 
   @impl true
   def handle_event("validate", %{"quest" => quest_params}, socket) do
-    changeset = Core.Quest.change_quest(socket.assigns.quest, quest_params)
+    changeset = Core.Quests.change_quest(socket.assigns.quest, quest_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -51,7 +51,7 @@ defmodule Web.Live.Quest.FormComponent do
   end
 
   defp save_quest(socket, :edit, quest_params) do
-    case Core.Quest.update_quest(socket.assigns.quest, quest_params) do
+    case Core.Quests.update_quest(socket.assigns.quest, quest_params) do
       {:ok, quest} ->
         notify_parent({:saved, quest})
 
@@ -66,7 +66,7 @@ defmodule Web.Live.Quest.FormComponent do
   end
 
   defp save_quest(socket, :new, quest_params) do
-    case Core.Quest.create_quest(quest_params) do
+    case Core.Quests.create_quest(quest_params) do
       {:ok, quest} ->
         notify_parent({:saved, quest})
 

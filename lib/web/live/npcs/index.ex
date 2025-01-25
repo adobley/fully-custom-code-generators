@@ -1,11 +1,11 @@
-defmodule Web.Live.NPC.Index do
+defmodule Web.Live.NPCs.Index do
   use ArcaneAssistWeb, :live_view
 
   alias Core.Actors
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :npcs, Actors.NPC.list_npcs())}
+    {:ok, stream(socket, :npcs, Actors.NPCs.list_npcs())}
   end
 
   @impl true
@@ -16,7 +16,7 @@ defmodule Web.Live.NPC.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Npc")
-    |> assign(:npc, Actors.NPC.get_npc!(id))
+    |> assign(:npc, Actors.NPCs.get_npc!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -32,14 +32,14 @@ defmodule Web.Live.NPC.Index do
   end
 
   @impl true
-  def handle_info({Web.Live.NPC.FormComponent, {:saved, npc}}, socket) do
+  def handle_info({Web.Live.NPCs.FormComponent, {:saved, npc}}, socket) do
     {:noreply, stream_insert(socket, :npcs, npc)}
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    npc = Actors.NPC.get_npc!(id)
-    {:ok, _} = Actors.NPC.delete_npc(npc)
+    npc = Actors.NPCs.get_npc!(id)
+    {:ok, _} = Actors.NPCs.delete_npc(npc)
 
     {:noreply, stream_delete(socket, :npcs, npc)}
   end
