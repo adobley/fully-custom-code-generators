@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Gen.Resource do
-  @shortdoc "context, liveview and appropriate tests for an existing table and table"
+  @shortdoc "context, live view, schema, and migration generator"
   @moduledoc false
   use Mix.Task
 
@@ -18,6 +18,7 @@ defmodule Mix.Tasks.Gen.Resource do
 
     generators = [
       :generate_migrations,
+      :generate_schemas,
       :generate_context,
       :generate_context_tests,
       :generate_live_index,
@@ -156,19 +157,44 @@ defmodule Mix.Tasks.Gen.Resource do
         |> String.downcase()
         |> String.replace(".", "_")
 
-      schema_params =
+      migration_params =
         schema_data
         |> Map.put(:table, schema_data[:table])
-        |> Map.put(:migration_helper, Mix.Tasks.Gen.Resource.Helper.Migration)
+        |> Map.put(:helper, Mix.Tasks.Gen.Resource.Helper)
         |> Map.to_list()
 
       generated_file_contents =
         eval_from(
           "lib/mix/tasks/gen/resource/migration.exs",
-          schema_params
+          migration_params
         )
 
       output_filename = "priv/repo/migrations/#{file_name}.exs"
+
+      Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
+
+      output_filename
+    end
+  end
+
+  def generate_schemas(live_view_params) do
+    for {schema_name, schema_data} <- live_view_params[:schemas] do
+      live_view_params =
+        live_view_params
+        |> Keyword.put(:schema_name, schema_name)
+        |> Keyword.put(:schema, schema_data)
+
+      generated_file_contents =
+        eval_from(
+          "lib/mix/tasks/gen/resource/schema.exs",
+          live_view_params
+        )
+
+      module_as_filename =
+        schema_name
+        |> module_name_as_path()
+
+      output_filename = "lib/#{module_as_filename}.ex"
 
       Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
 

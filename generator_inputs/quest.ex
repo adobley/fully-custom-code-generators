@@ -5,30 +5,30 @@
     name: "Web.Live.Quests"
   },
   schemas: %{
-    "Core.Schema.Quest" => %{
+    "Schema.Quest" => %{
       table: "quests",
       fields: [
         %{
           name: "title",
-          type: "string"
+          type: :string
         },
         %{
           name: "description",
-          type: "string"
+          type: :string
         },
         %{
           name: "status",
-          type: "string",
-          options: ["active", "inactive"],
-          default: "active"
+          type: :string,
+          options: [:started, :unstarted, :finished],
+          default: :unstarted
         },
         %{
-          name: "start time",
-          type: "date"
+          name: "start date",
+          type: :date
         },
         %{
-          name: "finish time",
-          type: "date"
+          name: "finish date",
+          type: :date
         }
       ]
     }
