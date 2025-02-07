@@ -11,34 +11,39 @@ defmodule Web.Live.Quests.Show do
 
     ~H"""
     <.header>
-    Quest {@quest.id}
-    <:subtitle>This is a quest record from your database.</:subtitle>
-    <:actions>
+      Quest {@quest.id}
+      <:subtitle>This is a quest record from your database.</:subtitle>
+      <:actions>
         <.link patch={~p"/quests/#{@quest}/show/edit"} phx-click={JS.push_focus()}>
-        <.button>Edit quest</.button>
+          <.button>Edit quest</.button>
         </.link>
-    </:actions>
+      </:actions>
     </.header>
 
     <.list>
-    <:item title="Title">{@quest.title}</:item>
-    <:item title="Description">{@quest.description}</:item>
-    <:item title="Status">{@quest.status}</:item>
-    <:item title="Start Time">{@quest.start_time}</:item>
-    <:item title="Finish Time">{@quest.finish_time}</:item>
+      <:item title="Title">{@quest.title}</:item>
+      <:item title="Description">{@quest.description}</:item>
+      <:item title="Status">{@quest.status}</:item>
+      <:item title="Start Time">{@quest.start_time}</:item>
+      <:item title="Finish Time">{@quest.finish_time}</:item>
     </.list>
 
     <.back navigate={~p"/quests"}>Back to quests</.back>
 
-    <.modal :if={@live_action == :edit} id="quest-modal" show on_cancel={JS.patch(~p"/quests/#{@quest}")}>
-    <.live_component
+    <.modal
+      :if={@live_action == :edit}
+      id="quest-modal"
+      show
+      on_cancel={JS.patch(~p"/quests/#{@quest}")}
+    >
+      <.live_component
         module={Web.Live.Quests.FormComponent}
         id={@quest.id}
         title={@page_title}
         action={@live_action}
         quest={@quest}
         patch={~p"/quests/#{@quest}"}
-    />
+      />
     </.modal>
     """
   end

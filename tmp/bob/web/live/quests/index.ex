@@ -10,49 +10,54 @@ defmodule Web.Live.Quests.Index do
 
     ~H"""
     <.header>
-    Listing Quests
-    <:actions>
+      Listing Quests
+      <:actions>
         <.link patch={~p"/quests/new"}>
-        <.button>New Quest</.button>
+          <.button>New Quest</.button>
         </.link>
-    </:actions>
+      </:actions>
     </.header>
 
     <.table
-    id="quests"
-    rows={@streams.quests}
-    row_click={fn {_id, quest} -> JS.navigate(~p"/quests/#{quest}") end}
+      id="quests"
+      rows={@streams.quests}
+      row_click={fn {_id, quest} -> JS.navigate(~p"/quests/#{quest}") end}
     >
-    <:col :let={{_id, quest}} label="Title">{quest.title}</:col>
-    <:col :let={{_id, quest}} label="Description">{quest.description}</:col>
-    <:col :let={{_id, quest}} label="Status">{quest.status}</:col>
-    <:col :let={{_id, quest}} label="Start Time">{quest.start_time}</:col>
-    <:col :let={{_id, quest}} label="Finish Time">{quest.finish_time}</:col>
-    <:action :let={{_id, quest}}>
+      <:col :let={{_id, quest}} label="Title">{quest.title}</:col>
+      <:col :let={{_id, quest}} label="Description">{quest.description}</:col>
+      <:col :let={{_id, quest}} label="Status">{quest.status}</:col>
+      <:col :let={{_id, quest}} label="Start Time">{quest.start_time}</:col>
+      <:col :let={{_id, quest}} label="Finish Time">{quest.finish_time}</:col>
+      <:action :let={{_id, quest}}>
         <div class="sr-only">
-        <.link navigate={~p"/quests/#{quest}"}>Show</.link>
+          <.link navigate={~p"/quests/#{quest}"}>Show</.link>
         </div>
         <.link patch={~p"/quests/#{quest}/edit"}>Edit</.link>
-    </:action>
-    <:action :let={{id, quest}}>
+      </:action>
+      <:action :let={{id, quest}}>
         <.link
-        phx-click={JS.push("delete", value: %{id: quest.id}) |> hide("##{id}")}
-        data-confirm="Are you sure?"
+          phx-click={JS.push("delete", value: %{id: quest.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
         >
-        Delete
+          Delete
         </.link>
-    </:action>
+      </:action>
     </.table>
 
-    <.modal :if={@live_action in [:new, :edit]} id="quest-modal" show on_cancel={JS.patch(~p"/quests")}>
-    <.live_component
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="quest-modal"
+      show
+      on_cancel={JS.patch(~p"/quests")}
+    >
+      <.live_component
         module={Web.Live.Quests.FormComponent}
         id={@quest.id || :new}
         title={@page_title}
         action={@live_action}
         quest={@quest}
         patch={~p"/quests"}
-    />
+      />
     </.modal>
     """
   end
