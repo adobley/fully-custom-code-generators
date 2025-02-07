@@ -17,6 +17,7 @@ defmodule Mix.Tasks.Gen.Resource do
       )
 
     generators = [
+      :generate_migrations,
       :generate_context,
       :generate_context_tests,
       :generate_live_index,
@@ -35,7 +36,7 @@ defmodule Mix.Tasks.Gen.Resource do
   def generate_context(live_view_params) do
     generated_file_contents =
       eval_from(
-        "lib/mix/tasks/gen/resource/context.eex",
+        "lib/mix/tasks/gen/resource/context.exs",
         live_view_params
       )
 
@@ -54,7 +55,7 @@ defmodule Mix.Tasks.Gen.Resource do
   def generate_context_tests(live_view_params) do
     generated_file_contents =
       eval_from(
-        "lib/mix/tasks/gen/resource/context_tests.eex",
+        "lib/mix/tasks/gen/resource/context_tests.exs",
         live_view_params
       )
 
@@ -76,7 +77,7 @@ defmodule Mix.Tasks.Gen.Resource do
     if Enum.any?([:index, :new, :edit], &(&1 in actions)) do
       generated_file_contents =
         eval_from(
-          "lib/mix/tasks/gen/resource/index.eex",
+          "lib/mix/tasks/gen/resource/index.exs",
           live_view_params
         )
 
@@ -102,7 +103,7 @@ defmodule Mix.Tasks.Gen.Resource do
     if Enum.any?([:index, :new, :edit], &(&1 in actions)) do
       generated_file_contents =
         eval_from(
-          "lib/mix/tasks/gen/resource/show.eex",
+          "lib/mix/tasks/gen/resource/show.exs",
           live_view_params
         )
 
@@ -128,7 +129,7 @@ defmodule Mix.Tasks.Gen.Resource do
     if Enum.any?([:index, :new, :edit], &(&1 in actions)) do
       generated_file_contents =
         eval_from(
-          "lib/mix/tasks/gen/resource/live_view_tests.eex",
+          "lib/mix/tasks/gen/resource/live_view_tests.exs",
           live_view_params
         )
 
@@ -148,6 +149,33 @@ defmodule Mix.Tasks.Gen.Resource do
     end
   end
 
+  def generate_migrations(live_view_params) do
+    for {schema_name, schema_data} <- live_view_params[:schemas] do
+      file_name =
+        ("#{generate_timestamp()}_add_" <> schema_name)
+        |> String.downcase()
+        |> String.replace(".", "_")
+
+      schema_params =
+        schema_data
+        |> Map.put(:table, schema_data[:table])
+        |> Map.put(:migration_helper, Mix.Tasks.Gen.Resource.Helper.Migration)
+        |> Map.to_list()
+
+      generated_file_contents =
+        eval_from(
+          "lib/mix/tasks/gen/resource/migration.exs",
+          schema_params
+        )
+
+      output_filename = "priv/repo/migrations/#{file_name}.exs"
+
+      Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
+
+      output_filename
+    end
+  end
+
   defp module_name_as_path(module_name) do
     module_name
     |> String.split(".")
@@ -161,5 +189,33 @@ defmodule Mix.Tasks.Gen.Resource do
         raise "file #{source_file_path} does not exist"
 
     EEx.eval_string(content, binding)
+  end
+
+  def generate_timestamp do
+    # Get the current UTC time
+    {:ok, datetime} = DateTime.now("Etc/UTC")
+
+    # Format the timestamp as YYYYMMDDHHMMSS
+    datetime
+    |> DateTime.to_naive()
+    |> NaiveDateTime.to_iso8601()
+    |> String.replace(~r/[-:T]/, "")
+    |> String.slice(0..13)
+  end
+end
+
+defmodule TimestampGenerator do
+  def generate_timestamp do
+    # Get the current UTC time
+    datetime =
+      DateTime.utc_now()
+      |> IO.inspect(label: " #{__ENV__.file}:#{__ENV__.line}")
+
+    # Format the timestamp as YYYYMMDDHHMMSS
+    datetime
+    |> DateTime.to_naive()
+    |> NaiveDateTime.to_iso8601()
+    |> String.replace(~r/[-:T]/, "")
+    |> String.slice(0..13)
   end
 end
