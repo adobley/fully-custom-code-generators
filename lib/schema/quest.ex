@@ -1,6 +1,6 @@
 defmodule Schema.Quest do
   @moduledoc false
-  use Ecto.Schema
+  use ArcaneAssist.Schema
 
   schema "quests" do
     field :description, :string

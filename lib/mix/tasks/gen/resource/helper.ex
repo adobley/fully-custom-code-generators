@@ -39,7 +39,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
 
   def migration_types(fields) do
     for field <- fields do
-      "add :#{underscore(field.name)}, #{field.type}"
+      "add :#{underscore(field.name)}, #{inspect(field.type)}"
     end
     |> Enum.join("\n")
   end
