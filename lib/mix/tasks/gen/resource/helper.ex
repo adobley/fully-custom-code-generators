@@ -11,8 +11,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
       "\n",
       fn
         field ->
-          base_string =
-            "field :#{underscore(field.name)}, #{ecto_type(field)}"
+          base_string = "field :#{underscore(field.name)}, #{ecto_type(field)}"
 
           if Map.get(field, :default) do
             base_string <> ", default: #{inspect(field.default)}"
@@ -42,5 +41,12 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
       "add :#{underscore(field.name)}, #{inspect(field.type)}"
     end
     |> Enum.join("\n")
+  end
+
+  def required_fields(fields) do
+    fields
+    |> Enum.filter(&Map.get(&1, :required?, false))
+    |> Enum.map(& &1.name)
+    |> Enum.map(&String.to_atom/1)
   end
 end

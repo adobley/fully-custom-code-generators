@@ -5,77 +5,79 @@ defmodule <%= context.name %>Test do
 
   import ArcaneAssist.Fixtures
 
-  # TODO: Everywhere we see "name" in this file needs to be updated when we have schema in our doc
-  # or possibly it should call out to a factory for valid/invailid?
-  @invalid_attrs %{name: DateTime.utc_now()}
+  <%= for {schema_name, schema} <- schemas, schema.generate_context_functions? do %>
+    # TODO: Everywhere we see "name" in this file needs to be updated when we have schema in our doc
+    # or possibly it should call out to a factory for valid/invailid?
+    @invalid_attrs %{name: DateTime.utc_now()}
 
-  describe "list/<%= context.plural %>/0" do
-    test "success: returns all <%= context.plural %>" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      assert <%= String.capitalize(context.plural) %>.list_<%= context.plural %>() == [<%= context.singular %>]
-    end
-  end
-
-  describe "get_<%= context.singular %>!/1" do
-    test "success: returns the <%= context.singular %> with given id" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      assert <%= String.capitalize(context.plural) %>.get_<%= context.singular %>!(<%= context.singular %>.id) == <%= context.singular %>
-    end
-  end
-
-  describe "create_<%= context.singular %>/1" do
-    test "success: with valid data creates a <%= context.singular %>" do
-      valid_attrs = %{name: "some name"}
-
-      assert {:ok, %Schema.<%= String.capitalize(context.singular) %>{} = <%= context.singular %>} = <%= String.capitalize(context.plural) %>.create_<%= context.singular %>(valid_attrs)
-      assert <%= context.singular %>.name == "some name"
-    end
-
-    test "success: with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = <%= String.capitalize(context.plural) %>.create_<%= context.singular %>(@invalid_attrs)
-    end
-  end
-
-  describe "update_<%= context.singular %>/2" do
-    test "success: with valid data updates the <%= context.singular %>" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      update_attrs = %{name: "some updated name"}
-
-      assert {:ok, %Schema.<%= String.capitalize(context.singular) %>{} = <%= context.singular %>} = <%= String.capitalize(context.plural) %>.update_<%= context.singular %>(<%= context.singular %>, update_attrs)
-      assert <%= context.singular %>.name == "some updated name"
-    end
-
-    test "error: returns changeset with errors" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      assert {:error, %Ecto.Changeset{}} = <%= String.capitalize(context.plural) %>.update_<%= context.singular %>(<%= context.singular %>, @invalid_attrs)
-      assert <%= context.singular %> == <%= String.capitalize(context.plural) %>.get_<%= context.singular %>!(<%= context.singular %>.id)
-    end
-  end
-
-  describe "delete_<%= context.singular %>/1" do
-    test "success: deletes the <%= context.singular %>" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      assert {:ok, %Schema.<%= String.capitalize(context.singular) %>{}} = <%= String.capitalize(context.plural) %>.delete_<%= context.singular %>(<%= context.singular %>)
-      assert_raise Ecto.NoResultsError, fn -> <%= String.capitalize(context.plural) %>.get_<%= context.singular %>!(<%= context.singular %>.id) end
-    end
-  end
-
-  describe "change_<%= context.singular %>/1" do
-    test "success: returns a <%= context.singular %> changeset" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-      assert %Ecto.Changeset{} = <%= String.capitalize(context.plural) %>.change_<%= context.singular %>(<%= context.singular %>)
-    end
-
-    test "error: returns invalid changeset when given bad data" do
-      <%= context.singular %> = <%= context.singular %>_fixture()
-
-      assert changeset = %Ecto.Changeset{valid?: false} = <%= String.capitalize(context.plural) %>.change_<%= context.singular %>(<%= context.singular %>, @invalid_attrs)
-
-      errors = errors_on(changeset)
-
-      for {field, _} <- @invalid_attrs do
-        assert Enum.member?(errors, {field, ["is invalid"]})
+    describe "list/<%= schema.plural %>/0" do
+      test "success: returns all <%= schema.plural %>" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        assert <%= String.capitalize(schema.plural) %>.list_<%= schema.plural %>() == [<%= schema.singular %>]
       end
     end
-  end
+
+    describe "get_<%= schema.singular %>!/1" do
+      test "success: returns the <%= schema.singular %> with given id" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        assert <%= String.capitalize(schema.plural) %>.get_<%= schema.singular %>!(<%= schema.singular %>.id) == <%= schema.singular %>
+      end
+    end
+
+    describe "create_<%= schema.singular %>/1" do
+      test "success: with valid data creates a <%= schema.singular %>" do
+        valid_attrs = %{name: "some name"}
+
+        assert {:ok, %<%= schema_name %>{} = <%= schema.singular %>} = <%= String.capitalize(schema.plural) %>.create_<%= schema.singular %>(valid_attrs)
+        assert <%= schema.singular %>.name == "some name"
+      end
+
+      test "success: with invalid data returns error changeset" do
+        assert {:error, %Ecto.Changeset{}} = <%= String.capitalize(schema.plural) %>.create_<%= schema.singular %>(@invalid_attrs)
+      end
+    end
+
+    describe "update_<%= schema.singular %>/2" do
+      test "success: with valid data updates the <%= schema.singular %>" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        update_attrs = %{name: "some updated name"}
+
+        assert {:ok, %<%= schema_name %>{} = <%= schema.singular %>} = <%= String.capitalize(schema.plural) %>.update_<%= schema.singular %>(<%= schema.singular %>, update_attrs)
+        assert <%= schema.singular %>.name == "some updated name"
+      end
+
+      test "error: returns changeset with errors" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        assert {:error, %Ecto.Changeset{}} = <%= String.capitalize(schema.plural) %>.update_<%= schema.singular %>(<%= schema.singular %>, @invalid_attrs)
+        assert <%= schema.singular %> == <%= String.capitalize(schema.plural) %>.get_<%= schema.singular %>!(<%= schema.singular %>.id)
+      end
+    end
+
+    describe "delete_<%= schema.singular %>/1" do
+      test "success: deletes the <%= schema.singular %>" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        assert {:ok, %<%= schema_name %>{}} = <%= String.capitalize(schema.plural) %>.delete_<%= schema.singular %>(<%= schema.singular %>)
+        assert_raise Ecto.NoResultsError, fn -> <%= String.capitalize(schema.plural) %>.get_<%= schema.singular %>!(<%= schema.singular %>.id) end
+      end
+    end
+
+    describe "change_<%= schema.singular %>/1" do
+      test "success: returns a <%= schema.singular %> changeset" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+        assert %Ecto.Changeset{} = <%= String.capitalize(schema.plural) %>.change_<%= schema.singular %>(<%= schema.singular %>)
+      end
+
+      test "error: returns invalid changeset when given bad data" do
+        <%= schema.singular %> = <%= schema.singular %>_fixture()
+
+        assert changeset = %Ecto.Changeset{valid?: false} = <%= String.capitalize(schema.plural) %>.change_<%= schema.singular %>(<%= schema.singular %>, @invalid_attrs)
+
+        errors = errors_on(changeset)
+
+        for {field, _} <- @invalid_attrs do
+          assert Enum.member?(errors, {field, ["is invalid"]})
+        end
+      end
+    end
+  <% end %>
 end
