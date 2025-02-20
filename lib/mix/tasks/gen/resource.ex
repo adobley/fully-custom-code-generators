@@ -23,6 +23,7 @@ defmodule Mix.Tasks.Gen.Resource do
       :generate_context_tests,
       :generate_live_index,
       :generate_live_show,
+      :generate_live_edit,
       :generate_live_view_tests
     ]
 
@@ -112,6 +113,32 @@ defmodule Mix.Tasks.Gen.Resource do
         live_view_params
         |> get_in([:live_view, :name])
         |> Kernel.<>(".Show")
+        |> module_name_as_path()
+
+      output_filename = "tmp/bob/#{module_as_filename}.ex"
+
+      Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
+
+      [output_filename]
+    else
+      []
+    end
+  end
+
+  def generate_live_edit(live_view_params) do
+    actions = get_in(live_view_params, [:live_view, :actions])
+
+    if Enum.any?([:index, :new, :edit], &(&1 in actions)) do
+      generated_file_contents =
+        eval_from(
+          "lib/mix/tasks/gen/resource/form_component.exs",
+          live_view_params
+        )
+
+      module_as_filename =
+        live_view_params
+        |> get_in([:live_view, :name])
+        |> Kernel.<>(".FormComponent")
         |> module_name_as_path()
 
       output_filename = "tmp/bob/#{module_as_filename}.ex"

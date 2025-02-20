@@ -22,11 +22,7 @@ defmodule <%= live_view.name %>.Index do
     rows={@streams.<%= context.plural %>}
     row_click={fn {_id, <%= context.singular %>} -> JS.navigate(~p"/<%= context.plural %>/#{<%= context.singular %>}") end}
     >
-    <:col :let={{_id, <%= context.singular %>}} label="Title">{<%= context.singular %>.title}</:col>
-    <:col :let={{_id, <%= context.singular %>}} label="Description">{<%= context.singular %>.description}</:col>
-    <:col :let={{_id, <%= context.singular %>}} label="Status">{<%= context.singular %>.status}</:col>
-    <:col :let={{_id, <%= context.singular %>}} label="Start Time">{<%= context.singular %>.start_time}</:col>
-    <:col :let={{_id, <%= context.singular %>}} label="Finish Time">{<%= context.singular %>.finish_time}</:col>
+    <%= helper.cols_for(context.singular, live_view.fields) %>
     <:action :let={{_id, <%= context.singular %>}}>
         <div class="sr-only">
         <.link navigate={~p"/<%= context.plural %>/#{<%= context.singular %>}"}>Show</.link>

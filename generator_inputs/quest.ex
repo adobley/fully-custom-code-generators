@@ -2,7 +2,30 @@
   context: %{name: "Core.Quests", plural: "quests", singular: "quest"},
   live_view: %{
     actions: [:index, :show, :edit, :new, :delete],
-    name: "Web.Live.Quests"
+    name: "Web.Live.Quests",
+    fields: [
+        %{
+          name: "title",
+          type: :text
+        },
+        %{
+          name: "description",
+          type: :text
+        },
+        %{
+          name: "status",
+          type: :select,
+          options: [:unstarted, :started, :finished]
+        },
+        %{
+          name: "start date",
+          type: :date
+        },
+        %{
+          name: "finish date",
+          type: :date
+        }
+      ]
   },
   schemas: %{
     "Schema.Milestone" => %{

@@ -7,7 +7,6 @@ defmodule <%= live_view.name %>.Show do
   end
 
   def render(assigns) do
-    dbg("This doesn't work yet, we need schema information to generate the table")
     ~H"""
     <.header>
     <%= String.capitalize(context.singular) %> {@<%= context.singular %>.id}
@@ -20,11 +19,7 @@ defmodule <%= live_view.name %>.Show do
     </.header>
 
     <.list>
-    <:item title="Title">{@<%= context.singular %>.title}</:item>
-    <:item title="Description">{@<%= context.singular %>.description}</:item>
-    <:item title="Status">{@<%= context.singular %>.status}</:item>
-    <:item title="Start Time">{@<%= context.singular %>.start_time}</:item>
-    <:item title="Finish Time">{@<%= context.singular %>.finish_time}</:item>
+    <%= helper.fields_for(context.singular, live_view.fields) %>
     </.list>
 
     <.back navigate={~p"/<%= context.plural %>"}>Back to <%= context.plural %></.back>
