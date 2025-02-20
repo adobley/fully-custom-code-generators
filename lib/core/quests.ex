@@ -1,8 +1,5 @@
 defmodule Core.Quests do
-  @moduledoc """
-  Quest access
-  """
-
+  @moduledoc false
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
@@ -105,7 +102,7 @@ defmodule Core.Quests do
   @doc false
   def changeset(quest, attrs) do
     quest
-    |> cast(attrs, [:title, :description, :status, :start_time, :finish_time])
-    |> validate_required([:title, :description, :status])
+    |> cast(attrs, Quest.__schema__(:fields))
+    |> validate_required([:title, :status])
   end
 end
