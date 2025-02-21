@@ -2,14 +2,13 @@ defmodule Web.Live.NPCs.NPCsLiveTest do
   use Web.ConnCase
 
   import Phoenix.LiveViewTest
-  import ArcaneAssist.ActorsFixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
   defp create_npc(_) do
-    npc = npc_fixture()
+    npc = insert(:npc)
     %{npc: npc}
   end
 

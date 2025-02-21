@@ -7,8 +7,6 @@ defmodule Web.Live.Quests.Show do
   end
 
   def render(assigns) do
-    dbg("This doesn't work yet, we need schema information to generate the table")
-
     ~H"""
     <.header>
       Quest {@quest.id}
@@ -22,10 +20,14 @@ defmodule Web.Live.Quests.Show do
 
     <.list>
       <:item title="Title">{@quest.title}</:item>
+
       <:item title="Description">{@quest.description}</:item>
+
       <:item title="Status">{@quest.status}</:item>
-      <:item title="Start Time">{@quest.start_time}</:item>
-      <:item title="Finish Time">{@quest.finish_time}</:item>
+
+      <:item title="Start Date">{@quest.start(date)}</:item>
+
+      <:item title="Finish Date">{@quest.finish(date)}</:item>
     </.list>
 
     <.back navigate={~p"/quests"}>Back to quests</.back>

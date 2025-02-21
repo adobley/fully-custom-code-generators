@@ -24,10 +24,15 @@ defmodule Web.Live.Quests.Index do
       row_click={fn {_id, quest} -> JS.navigate(~p"/quests/#{quest}") end}
     >
       <:col :let={{_id, quest}} label="Title">{quest.title}</:col>
+
       <:col :let={{_id, quest}} label="Description">{quest.description}</:col>
+
       <:col :let={{_id, quest}} label="Status">{quest.status}</:col>
-      <:col :let={{_id, quest}} label="Start Time">{quest.start_time}</:col>
-      <:col :let={{_id, quest}} label="Finish Time">{quest.finish_time}</:col>
+
+      <:col :let={{_id, quest}} label="Start Date">{quest.start(date)}</:col>
+
+      <:col :let={{_id, quest}} label="Finish Date">{quest.finish(date)}</:col>
+
       <:action :let={{_id, quest}}>
         <div class="sr-only">
           <.link navigate={~p"/quests/#{quest}"}>Show</.link>

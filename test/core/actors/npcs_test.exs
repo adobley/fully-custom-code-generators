@@ -3,20 +3,18 @@ defmodule Core.Actors.NPCsTest do
 
   alias Core.Actors.NPCs
 
-  import ArcaneAssist.ActorsFixtures
-
   @invalid_attrs %{name: DateTime.utc_now()}
 
   describe "list/npcs/0" do
     test "success: returns all npcs" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       assert NPCs.list_npcs() == [npc]
     end
   end
 
   describe "get_npc!/1" do
     test "success: returns the npc with given id" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       assert NPCs.get_npc!(npc.id) == npc
     end
   end
@@ -36,7 +34,7 @@ defmodule Core.Actors.NPCsTest do
 
   describe "update_npc/2" do
     test "success: with valid data updates the npc" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       update_attrs = %{name: "some updated name"}
 
       assert {:ok, %Schema.NPC{} = npc} = NPCs.update_npc(npc, update_attrs)
@@ -44,7 +42,7 @@ defmodule Core.Actors.NPCsTest do
     end
 
     test "error: returns changeset with errors" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       assert {:error, %Ecto.Changeset{}} = NPCs.update_npc(npc, @invalid_attrs)
       assert npc == NPCs.get_npc!(npc.id)
     end
@@ -52,7 +50,7 @@ defmodule Core.Actors.NPCsTest do
 
   describe "delete_npc/1" do
     test "success: deletes the npc" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       assert {:ok, %Schema.NPC{}} = NPCs.delete_npc(npc)
       assert_raise Ecto.NoResultsError, fn -> NPCs.get_npc!(npc.id) end
     end
@@ -60,12 +58,12 @@ defmodule Core.Actors.NPCsTest do
 
   describe "change_npc/1" do
     test "success: returns a npc changeset" do
-      npc = npc_fixture()
+      npc = insert(:npc)
       assert %Ecto.Changeset{} = NPCs.change_npc(npc)
     end
 
     test "error: returns invalid changeset when given bad data" do
-      npc = npc_fixture()
+      npc = insert(:npc)
 
       assert changeset = %Ecto.Changeset{valid?: false} = NPCs.change_npc(npc, @invalid_attrs)
 
