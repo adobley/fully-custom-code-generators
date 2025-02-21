@@ -78,9 +78,9 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
 
   def input_for(%{type: :select} = field) do
   label = title_case(field.name)
-  options = Enum.map(field.options, &(&1 |> Atom.to_string() |> title_case()))
+  options = Enum.map_join(field.options, ", ", &(inspect({&1 |> Atom.to_string() |> title_case(), &1})))
    """
-   <.input field={@form[:#{snake_case(field.name)}]} type="select" label="#{label}" options={#{options}} />
+   <.input field={@form[:#{snake_case(field.name)}]} type="select" label="#{label}" options={[#{options}]} />
    """
   end
 
