@@ -7,6 +7,8 @@ defmodule Mix.Tasks.Gen.Resource do
 
   @impl Mix.Task
   def run([input_filename]) do
+    Agent.start_link(fn -> DateTime.now!("Etc/UTC") end, name: :timestamp_agent)
+
     {live_view_params_from_file, _binding = []} = Code.eval_file(input_filename)
 
     live_view_params =
@@ -245,30 +247,17 @@ defmodule Mix.Tasks.Gen.Resource do
   end
 
   def generate_timestamp do
-    # Get the current UTC time
-    {:ok, datetime} = DateTime.now("Etc/UTC")
-
     # Format the timestamp as YYYYMMDDHHMMSS
-    datetime
+    next_timestamp()
     |> DateTime.to_naive()
     |> NaiveDateTime.to_iso8601()
     |> String.replace(~r/[-:T]/, "")
     |> String.slice(0..13)
   end
-end
 
-defmodule TimestampGenerator do
-  def generate_timestamp do
-    # Get the current UTC time
-    datetime =
-      DateTime.utc_now()
-      |> IO.inspect(label: " #{__ENV__.file}:#{__ENV__.line}")
-
-    # Format the timestamp as YYYYMMDDHHMMSS
-    datetime
-    |> DateTime.to_naive()
-    |> NaiveDateTime.to_iso8601()
-    |> String.replace(~r/[-:T]/, "")
-    |> String.slice(0..13)
+  defp next_timestamp do
+    Agent.get_and_update(:timestamp_agent, fn timestamp ->
+      {timestamp, DateTime.add(timestamp, 1, :second)}
+    end)
   end
 end
