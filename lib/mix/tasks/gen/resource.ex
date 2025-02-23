@@ -89,7 +89,7 @@ defmodule Mix.Tasks.Gen.Resource do
         |> Kernel.<>(".Index")
         |> module_name_as_path()
 
-      output_filename = "#{module_as_filename}.ex"
+      output_filename = "lib/#{module_as_filename}.ex"
 
       Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
 
@@ -115,7 +115,7 @@ defmodule Mix.Tasks.Gen.Resource do
         |> Kernel.<>(".Show")
         |> module_name_as_path()
 
-      output_filename = "#{module_as_filename}.ex"
+      output_filename = "lib/#{module_as_filename}.ex"
 
       Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
 
@@ -141,7 +141,7 @@ defmodule Mix.Tasks.Gen.Resource do
         |> Kernel.<>(".FormComponent")
         |> module_name_as_path()
 
-      output_filename = "#{module_as_filename}.ex"
+      output_filename = "lib/#{module_as_filename}.ex"
 
       Mix.Generator.create_file(output_filename, generated_file_contents, force: true)
 
