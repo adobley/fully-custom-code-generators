@@ -28,6 +28,7 @@ defmodule Web.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import Web.ConnCase
+      alias Test.Factory
     end
   end
 

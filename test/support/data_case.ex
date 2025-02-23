@@ -22,6 +22,7 @@ defmodule ArcaneAssist.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import ArcaneAssist.DataCase
+      alias Test.Factory
     end
   end
 

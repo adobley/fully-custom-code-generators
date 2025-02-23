@@ -8,7 +8,7 @@ defmodule Web.Live.NPCs.NPCsLiveTest do
   @invalid_attrs %{name: nil}
 
   defp create_npc(_) do
-    npc = insert(:npc)
+    npc = Factory.insert(:npc)
     %{npc: npc}
   end
 

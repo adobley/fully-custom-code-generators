@@ -1,5 +1,11 @@
 defmodule Test.Factory do
   use ExMachina.Ecto, repo: Core.Repo
 
-  use Test.Factory.ActorFactory
+  alias Schema.NPC
+
+  def npc_factory() do
+    %NPC{
+      name: Faker.String.base64()
+    }
+  end
 end
