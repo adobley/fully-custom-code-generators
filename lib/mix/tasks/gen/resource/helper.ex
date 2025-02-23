@@ -56,6 +56,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
 
   def col_for(context_singular, field) do
     label = title_case(field.name)
+
     """
     <:col :let={{_id, #{context_singular}}} label="#{label}">{#{context_singular}.#{field.name}}</:col>
     """
@@ -67,6 +68,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
 
   def field_for(context_singular, field) do
     label = title_case(field.name)
+
     """
     <:item title="#{label}">{@#{context_singular}.#{field.name}}</:item>
     """
@@ -77,18 +79,69 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
   end
 
   def input_for(%{type: :select} = field) do
-  label = title_case(field.name)
-  options = Enum.map_join(field.options, ", ", &(inspect({&1 |> Atom.to_string() |> title_case(), &1})))
-   """
-   <.input field={@form[:#{snake_case(field.name)}]} type="select" label="#{label}" options={[#{options}]} />
-   """
+    label = title_case(field.name)
+
+    options =
+      Enum.map_join(field.options, ", ", &inspect({&1 |> Atom.to_string() |> title_case(), &1}))
+
+    """
+    <.input field={@form[:#{snake_case(field.name)}]} type="select" label="#{label}" options={[#{options}]} />
+    """
   end
 
   def input_for(field) do
-  label = title_case(field.name)
-   """
-   <.input field={@form[:#{snake_case(field.name)}]} type="#{field.type}" label="#{label}" />
-   """
+    label = title_case(field.name)
+
+    """
+    <.input field={@form[:#{snake_case(field.name)}]} type="#{field.type}" label="#{label}" />
+    """
+  end
+
+  def factory_function({schema_name, schema_data}) do
+    aliased_module_name = String.split(schema_name, ".") |> List.last()
+
+    """
+    alias #{schema_data.schema_name}
+
+    def #{Macro.underscore(aliased_module_name)} %>_factory do
+      %#{aliased_module_name}{
+        #{create_factory_data(fields, aliased_module_name)}
+      }
+    end
+    """
+  end
+
+  def create_factory_data(field_data, aliased_module_name) do
+    fields_in_alphabetical_order =
+      field_data
+      |> Map.values()
+      |> Enum.sort_by(& &1.name)
+
+    Enum.map_join(
+      fields_in_alphabetical_order,
+      ",\n",
+      fn field ->
+        "  #{field.ecto_name}: #{factory_function(field, aliased_module_name)}"
+      end
+    )
+  end
+
+  def factory_function(%{type: :string}) do
+    "string()"
+  end
+
+  def factory_function(%{type: :date}) do
+    "date_random()"
+  end
+
+  def factory_function(field_data) do
+    raise """
+
+    This table has a field that we're not sure how to handle yet!
+    Head over to lib/mix/tasks/resource/helper.ex and add a new factory_function that matches this field info:
+
+    #{inspect(field_data)}
+    """
   end
 
   defp title_case(string) do
