@@ -58,7 +58,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
     label = title_case(field.name)
 
     """
-    <:col :let={{_id, #{context_singular}}} label="#{label}">{#{context_singular}.#{field.name}}</:col>
+    <:col :let={{_id, #{context_singular}}} label="#{label}">{#{context_singular}.#{snake_case(field.name)}}</:col>
     """
   end
 
@@ -70,7 +70,7 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
     label = title_case(field.name)
 
     """
-    <:item title="#{label}">{@#{context_singular}.#{field.name}}</:item>
+    <:item title="#{label}">{@#{context_singular}.#{snake_case(field.name)}}</:item>
     """
   end
 
