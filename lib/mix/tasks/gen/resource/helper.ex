@@ -124,6 +124,10 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
     )
   end
 
+  def factory_function(%{options: options}) do
+    "Enum.random(#{inspect(options)}) |> Atom.to_string()"
+  end
+
   def factory_function(%{type: :string}) do
     "string()"
   end
@@ -149,4 +153,35 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
   end
 
   defp snake_case(string), do: String.replace(string, " ", "_")
+
+  def invalid_attrs_for(fields) do
+    Enum.map_join(fields, ",\n", &invalid_attr_for/1)
+  end
+
+  defp invalid_attr_for(field) do
+    "#{snake_case(field.name)}: #{invalid_factory_function(field)}"
+  end
+
+
+  def invalid_factory_function(%{options: _}) do
+    "date_random()"
+  end
+
+  def invalid_factory_function(%{type: :string}) do
+    "date_random()"
+  end
+
+  def invalid_factory_function(%{type: :date}) do
+    "string()"
+  end
+
+  def invalid_factory_function(field_data) do
+    raise """
+
+    This table has a field that we're not sure how to handle yet!
+    Head over to lib/mix/tasks/resource/helper.ex and add a new invalid_factory_function that matches this field info:
+
+    #{inspect(field_data)}
+    """
+  end
 end

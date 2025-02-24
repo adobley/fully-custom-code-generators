@@ -4,5 +4,7 @@ defmodule <%= Macro.camelize(schema_name) %> do
 
   schema "<%= schema.table %>" do
     <%= helper.create_field_data(schema.fields) %>
+
+    timestamps()
   end
 end
