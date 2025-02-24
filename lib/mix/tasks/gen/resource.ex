@@ -4,6 +4,7 @@ defmodule Mix.Tasks.Gen.Resource do
   use Mix.Task
 
   alias Mix.Tasks.Format
+  alias Mix.Tasks.Gen.Resource.Helper
 
   @impl Mix.Task
   def run([input_filename]) do
@@ -15,7 +16,7 @@ defmodule Mix.Tasks.Gen.Resource do
       Keyword.put(
         live_view_params_from_file,
         :helper,
-        Mix.Tasks.Gen.Resource.Helper
+        Helper
       )
 
     generators = [
@@ -26,7 +27,8 @@ defmodule Mix.Tasks.Gen.Resource do
       :generate_live_index,
       :generate_live_show,
       :generate_live_edit,
-      :generate_live_view_tests
+      :generate_live_view_tests,
+      :output_factory_functions
     ]
 
     new_files =
@@ -229,6 +231,25 @@ defmodule Mix.Tasks.Gen.Resource do
 
       output_filename
     end
+  end
+
+  def output_factory_functions(live_view_params) do
+    functions_and_aliases =
+      for schema_things <- live_view_params[:schemas] do
+        Helper.factory_function_and_alias(schema_things)
+      end
+
+    formatted = Enum.join(functions_and_aliases, "\n\n") |> Code.format_string!()
+
+    IO.puts("""
+    please add the following functions and aliases to your factory file:
+    ```
+    #{formatted}
+    ```
+    """)
+
+    # output an empty list to match the other generators
+    []
   end
 
   defp module_name_as_path(module_name) do

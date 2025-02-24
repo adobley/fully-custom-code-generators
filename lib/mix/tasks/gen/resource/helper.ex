@@ -97,31 +97,29 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
     """
   end
 
-  def factory_function({schema_name, schema_data}) do
+  def factory_function_and_alias({schema_name, schema_data}) do
     aliased_module_name = String.split(schema_name, ".") |> List.last()
 
     """
-    alias #{schema_data.schema_name}
+      alias #{schema_name}
 
-    def #{Macro.underscore(aliased_module_name)} %>_factory do
-      %#{aliased_module_name}{
-        #{create_factory_data(fields, aliased_module_name)}
-      }
-    end
+      def #{Macro.underscore(aliased_module_name)}_factory do
+        %#{aliased_module_name}{
+          #{create_factory_data(schema_data.fields, aliased_module_name)}
+        }
+      end
     """
   end
 
   def create_factory_data(field_data, aliased_module_name) do
-    fields_in_alphabetical_order =
-      field_data
-      |> Map.values()
-      |> Enum.sort_by(& &1.name)
+    fields_in_alphabetical_order = Enum.sort_by(field_data, & &1.name)
 
     Enum.map_join(
       fields_in_alphabetical_order,
       ",\n",
       fn field ->
-        "  #{field.ecto_name}: #{factory_function(field, aliased_module_name)}"
+        field_name = underscore(field.name)
+        "  #{field_name}: #{factory_function(field)}"
       end
     )
   end
