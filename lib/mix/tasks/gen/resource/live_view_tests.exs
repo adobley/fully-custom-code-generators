@@ -2,7 +2,6 @@ defmodule <%= live_view.name %>.LiveTest do
   use Web.ConnCase
 
   import Phoenix.LiveViewTest
-  import ArcaneAssist.Fixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
