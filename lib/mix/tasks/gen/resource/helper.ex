@@ -105,13 +105,13 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
 
       def #{Macro.underscore(aliased_module_name)}_factory do
         %#{aliased_module_name}{
-          #{create_factory_data(schema_data.fields, aliased_module_name)}
+          #{create_factory_data(schema_data.fields)}
         }
       end
     """
   end
 
-  def create_factory_data(field_data, aliased_module_name) do
+  def create_factory_data(field_data) do
     fields_in_alphabetical_order = Enum.sort_by(field_data, & &1.name)
 
     Enum.map_join(

@@ -6,6 +6,7 @@ defmodule <%= live_view.name %>.Show do
     {:ok, socket}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <.header>

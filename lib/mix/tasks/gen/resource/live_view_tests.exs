@@ -16,7 +16,7 @@ defmodule <%= live_view.name %>.LiveTest do
   describe "Index" do
     setup [:create_<%= context.singular %>]
 
-    test "lists all <%= context.plural %>", %{conn: conn, <%= context.singular %>: <%= context.singular %>} do
+    test "lists all <%= context.plural %>", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/<%= context.plural %>")
 
       assert html =~ "Listing <%= String.capitalize(context.plural) %>"
