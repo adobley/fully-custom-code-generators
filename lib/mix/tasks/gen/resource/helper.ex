@@ -184,4 +184,10 @@ defmodule Mix.Tasks.Gen.Resource.Helper do
     #{inspect(field_data)}
     """
   end
+
+  def invalid_form_content_for(fields) do
+    field = Enum.find(fields, fn field -> field.type == :string end)
+
+    "#{snake_case(field.name)}: nil"
+  end
 end

@@ -6,8 +6,6 @@ defmodule <%= context.name %>Test do
   alias <%= context.name %>
 
   <%= for {schema_name, schema} <- schemas, schema.generate_context_functions? do %>
-    # TODO: Everywhere we see "name" in this file needs to be updated when we have schema in our doc
-    # or possibly it should call out to a factory for valid/invailid?
     @invalid_attrs %{ <%= helper.invalid_attrs_for(schema.fields) %> }
 
     describe "list/<%= schema.plural %>/0" do

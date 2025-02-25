@@ -6,7 +6,6 @@ defmodule <%= live_view.name %>.Index do
   end
 
   def render(assigns) do
-    dbg("This doesn't work yet, we need schema information to generate the table")
     ~H"""
     <.header>
     Listing <%= String.capitalize(context.plural) %>
