@@ -1,10 +1,12 @@
 defmodule <%= live_view.name %>.Index do
   use ArcaneAssistWeb, :live_view
 
+  @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :<%= context.plural %>, <%= context.name %>.list_<%= context.plural %>())}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <.header>
